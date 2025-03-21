@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: [ "main" ]
 
+# Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+permissions:
+  contents: read
+  pages: write      # to deploy to Pages
+  id-token: write   # to verify the deployment originates from an appropriate source
+
 jobs:
   build:
 
@@ -46,3 +52,21 @@ jobs:
         name: mido_webmidi_backend_whl
         path: dist/*
         include-hidden-files: true
+    - name: Upload pip wheel as pages artifact
+      id: deployment
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: dist/*
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Display URL
+        run: echo ${{ steps.deployment.outputs.page_url }}
