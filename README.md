@@ -27,6 +27,12 @@ This is a snippet showing how to load the package and list ports on pyodide:
     </script>
 ```
 
+## How to run the tests
+```shell
+pip install pytest && pytest .
+```
+
+
 ## How to build package
 ```shell
 pip install wheel && python setup.py bdist_wheel
